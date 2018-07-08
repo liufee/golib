@@ -29,6 +29,7 @@ type Excel struct {
 	filename string
 	file *xlsx.File
 	sheet *xlsx.Sheet
+	columns []string
 }
 
 func (t *Excel) SetColumns(columns []string) *Excel {
@@ -38,6 +39,7 @@ func (t *Excel) SetColumns(columns []string) *Excel {
 		cell := row.AddCell()
 		cell.Value = value
 	}
+	t.columns = columns
 	return t
 }
 
@@ -48,6 +50,22 @@ func (t *Excel) SetData(data [][]string) *Excel {
 			cell := row.AddCell()
 			cell.Value = v
 		}
+	}
+	return t
+}
+
+func (t *Excel) SetDataFromDb(results []map[string]interface{}) *Excel{
+	data := make([][]string, len(results))
+	i := 0
+	for _,v := range results{
+		j := 0
+		rows := make([]string, len(v))
+		for _,column := range t.columns{
+			rows[j] = ( v[column] ).(string)
+			j++;
+		}
+		data[i] = rows
+		i++
 	}
 	return t
 }

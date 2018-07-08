@@ -1,23 +1,23 @@
 package main
 
 import (
-	"./db"
+	"db"
 	"fmt"
-	"./excel"
-	"./utils/json"
-	"./utils/crypt"
-	textFile "./file/text"
-	"./compress"
+	"excel"
+	"utils/json"
+	"utils/crypt"
+	textFile "file/text"
+	"compress"
 )
 
 func main()  {
-	excelTry()
+	dbTry()
 }
 
 func dbTry()  {
 	c := db.NewConnection()
 	c.Open("root", "123456", "127.0.0.1", 3306, "cms")//"root:123456@tcp(127.0.0.1:3306)/cms"
-	data := c.QueryOne("select id,name,value from options");
+	data := c.Query("select id,name,value from options").FetchAll();//Fetch
 	for i,value := range data{
 		fmt.Print(i,value)
 		fmt.Print("\n\n")

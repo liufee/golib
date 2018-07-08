@@ -8,41 +8,71 @@ import (
 	"strconv"
 )
 
-func NewConnection() *Connection  {
-	return &Connection{}
+func NewConnection() *connection {
+	return &connection{}
 }
 
-type Connection struct {
-	Con *sql.DB
+type connection struct {
+	Db     *sql.DB
+	Rows *sql.Rows
+	columns []string
+	data []map[string]interface{}
 }
 
-func (c *Connection) Open(user string, password string, host string, port int, database string) {
+func (c *connection) Open(user string, password string, host string, port int, database string) *connection {
 	var dsn = user + ":" + password +"@tcp(" + host + ":" + strconv.Itoa(port) + ")/" + database
 	connection, err := sql.Open("mysql", dsn)
 	if err != nil {
 		fmt.Println(err);
 		os.Exit(1);
 	}
-	c.Con = connection
-	//time.Sleep(10000000000)
+	c.Db = connection
+	return c
 }
 
-func (c *Connection) Query(sql string) []map[string]interface{}{
-	rows, err := c.Con.Query(sql)
+func (c *connection) Query(sql string) *connection{
+	rows, err := c.Db.Query(sql)
 	if err != nil {
 		os.Exit(1)
 		fmt.Println(err)
 	}
-	columns,_ := rows.Columns();
+	c.Rows = rows
+	return c
+}
+
+func (c *connection) FetchAll() []map[string]interface{} {
+	c.parse()
+	return c.data
+}
+
+func (c *connection) Fetch() map[string]interface{} {
+	c.parse()
+	return c.data[0]
+}
+
+func (c *connection) GetColumns() []string {
+	c.parse()
+	return c.columns
+}
+
+func (c *connection) parse() {
+	if( c.columns != nil ){
+		return
+	}
+	if( c.Rows == nil ){
+		fmt.Print("必须先query")
+		os.Exit(1)
+	}
+	columns,_ := c.Rows.Columns();
 	count := len(columns)
 	tableData := make([]map[string]interface{}, 0)
 	values := make([]interface{}, count)
 	valuePtrs := make([]interface{}, count)
-	for rows.Next() {
+	for c.Rows.Next() {
 		for i := 0; i < count; i++ {
 			valuePtrs[i] = &values[i]
 		}
-		rows.Scan(valuePtrs...)
+		c.Rows.Scan(valuePtrs...)
 		entry := make(map[string]interface{})
 		for i, col := range columns {
 			var v interface{}
@@ -57,10 +87,6 @@ func (c *Connection) Query(sql string) []map[string]interface{}{
 		}
 		tableData = append(tableData, entry)
 	}
-	return tableData
-}
-
-func (c *Connection) QueryOne(sql string) map[string]interface{} {
-	tableData := c.Query(sql)
-	return tableData[0]
+	c.data = tableData
+	c.columns = columns
 }
