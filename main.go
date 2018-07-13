@@ -1,17 +1,19 @@
 package main
 
 import (
-	"db"
+	"github.com/liufee/go-lib/db"
 	"fmt"
-	"excel"
-	"utils/json"
-	"utils/crypt"
-	textFile "file/text"
-	"compress"
+	"github.com/liufee/go-lib/excel"
+	"github.com/liufee/go-lib/utils/json"
+	"github.com/liufee/go-lib/utils/crypt"
+	textFile "github.com/liufee/go-lib/file/text"
+	"github.com/liufee/go-lib/compress"
+	"github.com/liufee/go-lib/mail"
 )
 
 func main()  {
-	dbTry()
+	//dbTry()
+	mailTry()
 }
 
 func dbTry()  {
@@ -54,4 +56,11 @@ func fileTry(){
 
 func compressTry() {
 	compress.Unzip("feehicms.zip", "fee")
+}
+
+func mailTry() {
+	ok,err:=mail.SendMail("smtp.qiye.aliyun.com", 465, "postmaster@mail.feehi.com", "xxx", "postmaster@mail.feehi.com","job@feehi.com", "subjecttt", "sssss111222","text/html")
+	if(ok==false){
+		fmt.Println(err)
+	}
 }
