@@ -67,6 +67,7 @@ func (t *Excel) SetDataFromDb(results []map[string]interface{}) *Excel{
 		data[i] = rows
 		i++
 	}
+	t.SetData( data )
 	return t
 }
 
