@@ -10,6 +10,23 @@
   version = "v1.3.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:5a5c5247a21047ff2e05d9580aa3d35da87e796d354131065b704c882ea4d850"
+  name = "github.com/liufee/go-lib"
+  packages = [
+    "compress",
+    "db",
+    "excel",
+    "file/text",
+    "mail",
+    "utils/crypt",
+    "utils/json",
+  ]
+  pruneopts = "UT"
+  revision = "39a6fbd136c206c527f474704a564d1a3a78605f"
+  source = "github.com/liufee/go-lib"
+
+[[projects]]
   digest = "1:e60f2f1cd2e8dfdea48c2440c303d103266e754ab1d8b75796a4e4caddb7a68c"
   name = "github.com/tealeg/xlsx"
   packages = ["."]
@@ -38,6 +55,13 @@
   analyzer-version = 1
   input-imports = [
     "github.com/go-sql-driver/mysql",
+    "github.com/liufee/go-lib/compress",
+    "github.com/liufee/go-lib/db",
+    "github.com/liufee/go-lib/excel",
+    "github.com/liufee/go-lib/file/text",
+    "github.com/liufee/go-lib/mail",
+    "github.com/liufee/go-lib/utils/crypt",
+    "github.com/liufee/go-lib/utils/json",
     "github.com/tealeg/xlsx",
     "gopkg.in/gomail.v2",
   ]

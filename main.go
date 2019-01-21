@@ -9,11 +9,12 @@ import (
 	textFile "github.com/liufee/go-lib/file/text"
 	"github.com/liufee/go-lib/compress"
 	"github.com/liufee/go-lib/mail"
+	"github.com/liufee/go-lib/utils/rand"
 )
 
 func main()  {
 	//dbTry()
-	mailTry()
+	//mailTry()
 }
 
 func dbTry()  {
@@ -63,4 +64,8 @@ func mailTry() {
 	if(ok==false){
 		fmt.Println(err)
 	}
+}
+
+func randomString() {
+	fmt.Println(rand.GenerateRandomString(6))
 }
